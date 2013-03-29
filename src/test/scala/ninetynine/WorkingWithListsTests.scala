@@ -1,28 +1,32 @@
 package ninetynine
 
-import org.scalatest._
+import org.scalatest.Assertions
+import org.junit.{Ignore, Test}
 
-class WorkingWithListsSuite extends FunSuite {
-  
+class WorkingWithListsTests extends Assertions {
+
   import ninetynine.WorkingWithLists._
-  
+
   val MANY = 10000
   
-  test("P01: last") {
+  @Test
+  def P01_last() {
     assert(last(List(1, 2, 3, 4)) === 4)
     assert(last("zookeeper".toList) === 'r')
     assert(last(List("one")) === "one")
     assert(last((1 to MANY).toList) === MANY)
   }
 
-  test("P02: penultimate") {
+  @Test
+  def P02_penultimate() {
     assert(penultimate(List(1, 2, 3, 4)) === 3)
     assert(penultimate("zookeeper".toList) === 'e')
     assert(penultimate(List("one", "two")) === "one")
     assert(penultimate((1 to MANY).toList) === MANY-1)
   }
 
-  test("P03: nth") {
+  @Test
+  def P03_nth() {
     assert(nth(0, List("boy")) === "boy")
     assert(nth(0, List(1, 2, 4, 8)) === 1)
     assert(nth(1, List(1, 2, 4, 8)) === 2)
@@ -31,48 +35,55 @@ class WorkingWithListsSuite extends FunSuite {
     assert(nth(MANY, (0 to MANY).toList) === MANY)
   }
   
-  test("P04: length") {
+  @Test
+  def P04_length() {
     assert(length(List("boy")) === 1)
     assert(length(List(1, 2, 4, 8)) === 4)
     assert(length((1 to MANY).toList) === MANY)
   }
   
-  test("P05: reverse") {
+  @Test
+  def P05_reverse() {
     assert(reverse(List()) === List())
     assert(reverse(List(1)) === List(1))
     assert(reverse(List(1, 2, 3)) === List(3, 2, 1))
     assert(reverse((1 to MANY).toList) === (MANY to 1 by -1).toList)
   }
   
-  test("P06: isPalindrome") {
+  @Test
+  def P06_isPalindrome() {
     assert(isPalindrome("madam".toList))
     assert(!isPalindrome("sir".toList))
     assert(!isPalindrome((1 to MANY).toList))
     assert(isPalindrome((-MANY to MANY).map(_.abs).toList))
   }
   
-  test("P07: flatten") {
+  @Test
+  def P07_flatten() {
     assert(flatten(List(List(1, 1), 2, List(3, List(5, 8))))
       === List(1, 1, 2, 3, 5, 8))
     assert(flatten(List(List(List(List(List()))))) === List())
     assert(flatten(List(List(List(List(List(99)))))) === List(99))
   }
 
-  test("P07 (alt): altflatten") {
+  @Test
+  def P07_altflatten() {
     assert(altflatten(List(List(1, 1), 2, List(3, List(5, 8))))
       === List(1, 1, 2, 3, 5, 8))
     assert(altflatten(List(List(List(List(List()))))) === List())
     assert(altflatten(List(List(List(List(List(99)))))) === List(99))
   }
 
-  test("P08: compress") {
+  @Test
+  def P08_compress() {
     assert(compress(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e))
       === List('a, 'b, 'c, 'a, 'd, 'e))
     assert(compress(List('a, 'a, 'a))
       === List('a))
   }
   
-  test("P09: pack") {
+  @Test
+  def P09_pack() {
     assert(pack(
       List('a, 'a, 'a, 'a,
         'b,
@@ -88,7 +99,8 @@ class WorkingWithListsSuite extends FunSuite {
                List('e, 'e, 'e, 'e)))
   }
   
-  test("P10: encode") {
+  @Test
+  def P10_encode() {
     assert(encode(
       List('a, 'a, 'a, 'a,
         'b,
@@ -99,7 +111,8 @@ class WorkingWithListsSuite extends FunSuite {
       === List((4,'a), (1,'b), (2,'c), (2,'a), (1,'d), (4,'e)))
   }  
 
-  test("P11: encodeModified") {
+  @Test
+  def P11_encodeModified() {
     assert(encodeModified(
       List('a, 'a, 'a, 'a,
            'b,
@@ -110,22 +123,26 @@ class WorkingWithListsSuite extends FunSuite {
       === List((4,'a), 'b, (2,'c), (2,'a), 'd, (4,'e)))
   }
   
-  test("P12: decode") {
+  @Test
+  def P12_decode() {
     assert(decode(List((4, 'a), (1, 'b), (2, 'c), (2, 'a), (1, 'd), (4, 'e)))
       === List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e))
   }
   
-  test("P13: encodeDirect") {
+  @Test
+  def P13_encodeDirect() {
     assert(encodeDirect(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e))
       === List((4,'a), (1,'b), (2,'c), (2,'a), (1,'d), (4,'e)))
   }
   
-  test("P14: duplicate") {
+  @Test
+  def P14_duplicate() {
     assert(duplicate(List('a, 'b, 'c, 'c, 'd))
       === List('a, 'a, 'b, 'b, 'c, 'c, 'c, 'c, 'd, 'd))
   }
   
-  test("P15: duplicateN") {
+  @Test
+  def P15_duplicateN() {
     assert(duplicateN(0, List('a, 'b, 'c, 'c, 'd))
       === List())
     assert(duplicateN(1, List('a, 'b, 'c, 'c, 'd))
@@ -134,17 +151,20 @@ class WorkingWithListsSuite extends FunSuite {
       === List('a, 'a, 'a, 'b, 'b, 'b, 'c, 'c, 'c, 'c, 'c, 'c, 'd, 'd, 'd))
   }
   
-  test("P16: drop") {
+  @Test
+  def P16_drop() {
     assert(drop(3, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
       === List('a, 'b, 'd, 'e, 'g, 'h, 'j, 'k))
   }
   
-  test("P17: split") {
+  @Test
+  def P17_split() {
     assert(split(3, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
         === (List('a, 'b, 'c),List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k)))
   }
   
-  test("P18: slice") {
+  @Test
+  def P18_slice() {
     assert(slice(3, 7, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
       === List('d, 'e, 'f, 'g))
     assert(slice(7, 7, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
@@ -155,7 +175,8 @@ class WorkingWithListsSuite extends FunSuite {
     intercept[IndexOutOfBoundsException] { slice(3, 5, List('a, 'b, 'c)) }
   }
   
-  test("P19: rotate") {
+  @Test
+  def P19_rotate() {
     assert(rotate(3, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
       === List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'a, 'b, 'c))
     assert(rotate(-2, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
@@ -186,7 +207,8 @@ class WorkingWithListsSuite extends FunSuite {
     assert(rotate(MANY, List()) == List())
   }
 
-  test("P20: removeAt") {
+  @Test
+  def P20_removeAt() {
     assert(removeAt(0, List('a, 'b, 'c, 'd)) === (List('b, 'c, 'd),'a))
     assert(removeAt(1, List('a, 'b, 'c, 'd)) === (List('a, 'c, 'd),'b))
     assert(removeAt(2, List('a, 'b, 'c, 'd)) === (List('a, 'b, 'd),'c))
@@ -195,7 +217,8 @@ class WorkingWithListsSuite extends FunSuite {
     intercept[IndexOutOfBoundsException] { removeAt(4, List('a, 'b, 'c, 'd)) }
   }
   
-  test("P21: insertAt") {
+  @Test
+  def P21_insertAt() {
     assert(insertAt('new, 0, List('a, 'b, 'c, 'd)) === List('new, 'a, 'b, 'c, 'd))
     assert(insertAt('new, 1, List('a, 'b, 'c, 'd)) === List('a, 'new, 'b, 'c, 'd))
     assert(insertAt('new, 4, List('a, 'b, 'c, 'd)) === List('a, 'b, 'c, 'd, 'new))
@@ -203,13 +226,15 @@ class WorkingWithListsSuite extends FunSuite {
     intercept[IndexOutOfBoundsException] { insertAt('new, 5, List('a, 'b, 'c, 'd)) }
   }
 
-  test("P22: range") {
+  @Test
+  def P22_range() {
     assert(range(4, 9) === List(4, 5, 6, 7, 8, 9))
     assert(range(4, 4) === List(4))
     intercept[IllegalArgumentException] { range(5, 4) }
   }
 
-  test("P23: randomSelect") {
+  @Test
+  def P23_randomSelect() {
     val items = List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j)
 
     assert(randomSelect(0, items) === List())
@@ -229,19 +254,22 @@ class WorkingWithListsSuite extends FunSuite {
     intercept[IllegalArgumentException] { randomSelect(11, items) }
   }
 
-  ignore("P23: randomSelect timing") { // should be O(n), is currently O(n^2)
+  @Test @Ignore
+  def P23_randomSelect_timing() { // should be O(n), is currently O(n^2)
     val items = (1 to MANY * 10).toList
     randomSelect(MANY * 10, items)
   }
 
-  test("P24: lotto") {
+  @Test
+  def P24_lotto() {
     val numbers = lotto(6, 49)
     assert(numbers.length === 6)
     assert(numbers.forall(_ >= 1))
     assert(numbers.forall(_ <= 49))
   }
 
-  test("P25: randomPermute") {
+  @Test
+  def P25_randomPermute() {
     val items = (1 to 12).toList
     val permutedItems = randomPermute(items)
     assert(items.length === permutedItems.length)
@@ -255,7 +283,8 @@ class WorkingWithListsSuite extends FunSuite {
     assert(permutedItems != differentPermutation)
   }
 
-  test("P26: combinations") {
+  @Test
+  def P26_combinations() {
     val cs = combinations(3, (1 to 12).toList)
     assert(cs.contains(List(1, 2, 3)))
     assert(cs.contains(List(10, 11, 12)))
@@ -263,7 +292,8 @@ class WorkingWithListsSuite extends FunSuite {
     assert(cs.forall(_.length == 3))
   }
 
-  test("P27a: group3") {
+  @Test
+  def P27a_group3() {
     val items = List("Aldo", "Beat", "Carla", "David", "Evi", "Flip", "Gary", "Hugo", "Ida")
     val groupings = group3(items)
     assert(groupings.size === 1260) // 9! / (2! * 3! * 4!) = 362880 / (2 * 6 * 24) = 1260
@@ -275,7 +305,8 @@ class WorkingWithListsSuite extends FunSuite {
                                    List("Aldo", "Beat", "Carla", "David"))))
   }
 
-  test("P28: group") {
+  @Test
+  def P28b_group() {
     val items = List("Aldo", "Beat", "Carla", "David", "Evi", "Flip", "Gary", "Hugo", "Ida")
     val groupings = group(List(2, 2, 5), items)
     assert(groupings.size === 756) // 9! / (2! * 2! * 5!)) = 362880 / (2 * 2 * 120) = 756
@@ -287,7 +318,8 @@ class WorkingWithListsSuite extends FunSuite {
                                    List("Aldo", "Beat", "Carla", "David", "Evi"))))
   }
 
-  test("P29: lsort") {
+  @Test
+  def P29_lsort() {
     assert(
       lsort(List(List('a, 'b, 'c),
                  List('d, 'e),
@@ -304,7 +336,9 @@ class WorkingWithListsSuite extends FunSuite {
                List('f, 'g, 'h),
                List('i, 'j, 'k, 'l)))
   }
-  test("P30: lsortFreq") {
+
+  @Test
+  def P30_lsortFreq() {
     assert(
       lsortFreq(List(List('a, 'b, 'c),
                      List('d, 'e),

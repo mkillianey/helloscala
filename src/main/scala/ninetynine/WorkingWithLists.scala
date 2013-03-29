@@ -28,8 +28,6 @@ object WorkingWithLists {
     case _ :: rest => last(rest)
   }
 
-  List().last
-
   /**
    * P02 (*) Find the last but one element of a list.
    * Example:
@@ -266,7 +264,8 @@ object WorkingWithLists {
   }
   /**
    * P17 (*) Split a list into two parts.
-   * The length of the first part is given. Use a Tuple for your result.
+   * The length of the first part is given.
+   * Use a Tuple for your result.
    * Example:
    *
    * scala> split(3, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
@@ -276,8 +275,8 @@ object WorkingWithLists {
     @tailrec
     def helper(nMore: Int, from: List[T], to: List[T]): (List[T], List[T]) = (nMore, from) match {
       case (_, Nil) => (reverse(to), from)
-      case (n, _) if n <= 0 => (reverse(to), from)
-      case (n, t :: ts) => helper(n - 1, ts, t :: to)
+      case (more, _) if more <= 0 => (reverse(to), from)
+      case (more, first :: rest) => helper(more - 1, rest, first :: to)
     }
     helper(n, ts, List())
   }
@@ -421,7 +420,7 @@ object WorkingWithLists {
   def combinations[T](n : Int, ts : List[T]) : List[List[T]] = (n, ts) match {
     case (0, _) => List(List()) // one combination for zero elements => that with no elements
     case (_, Nil) => List() // ran out of items!
-    case (n, first :: rest) => combinations(n, rest) ::: (combinations(n-1, rest).map(first :: _))
+    case (k, first :: rest) => combinations(k, rest) ::: (combinations(k-1, rest).map(first :: _))
   }
 
   /*
