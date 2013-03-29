@@ -1,41 +1,6 @@
 package ninetynine
 
-
-sealed abstract class Tree[+T] {
-  val height : Int
-
-  /*
-   * P55 (**) Construct completely balanced binary trees.
-   * In a completely balanced binary tree, the following property holds for every node:
-   * The number of nodes in its left subtree and the number of nodes in its right subtree
-   * are almost equal, which means their difference is not greater than one.
-   * Define an object named Tree. Write a function Tree.cBalanced to construct
-   * completely balanced binary trees for a given number of nodes. The function
-   * should generate all solutions. The function should take as parameters the
-   * number of nodes and a single value to put in all of them.
-   *
-   * scala> Tree.cBalanced(4, "x")
-   * res0: List(Node[String]) = List(T(x T(x . .) T(x . T(x . .))), T(x T(x . .) T(x T(x . .) .)), ...
-   */
-  def cBalanced[T](size : Int, t : T) : List[Tree[T]] = {
-    List()
-  }
-}
-
-case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
-  override val height = 1 + (left.height max right.height)
-  override def toString = s"T($value$left$right)"
-}
-
-case object End extends Tree[Nothing] {
-  override val height = 0
-  override def toString = "."
-}
-
-object Node {
-  def apply[T](value: T): Node[T] = Node(value, End, End)
-}
-
+package binarytree {
 
 /*
  * Binary Trees
@@ -61,6 +26,54 @@ object Node {
  * P54 Omitted; our tree representation will only allow well-formed trees.
  * Score one for static typing.
  */
+
+
+sealed abstract class Tree[+T]
+
+case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
+  override def toString = s"T($value$left$right)"
+}
+
+case object End extends Tree[Nothing] {
+  override def toString = "."
+}
+
+object Node {
+  def apply[T](value: T): Node[T] = Node(value, End, End)
+}
+
+object Tree {
+  /*
+   * P55 (**) Construct completely balanced binary trees.
+   * In a completely balanced binary tree, the following property holds for every node:
+   * The number of nodes in its left subtree and the number of nodes in its right subtree
+   * are almost equal, which means their difference is not greater than one.
+   * Define an object named Tree. Write a function Tree.cBalanced to construct
+   * completely balanced binary trees for a given number of nodes. The function
+   * should generate all solutions. The function should take as parameters the
+   * number of nodes and a single value to put in all of them.
+   *
+   * scala> Tree.cBalanced(4, "x")
+   * res0: List(Node[String]) = List(T(x T(x . .) T(x . T(x . .))), T(x T(x . .) T(x T(x . .) .)), ...
+   */
+  def cBalanced[T](size : Int, t : T) : List[Tree[T]] = size match {
+    case n if n <= 0 => List(End)
+    case n if n % 2 == 1 => {
+      val half = cBalanced(n / 2, t)
+      (for (left <- half; right <- half) yield Node(t, left, right)).toList
+    }
+    case n => {
+      val half = cBalanced(n / 2, t)
+      val halfMinusOne = cBalanced((n / 2) - 1, t)
+      val part1 = (for (left <- half; right <- halfMinusOne)
+                   yield Node(t, left, right)).toList
+      val part2 = (for (left <- halfMinusOne; right <- half)
+                   yield Node(t, left, right)).toList
+      part1 ::: part2
+    }
+  }
+}
+
 
 /* P56 (**) Symmetric binary trees.
  * Let us call a binary tree symmetric if you can draw a vertical line through the root node and then the right subtree is the mirror image of the left subtree. Add an isSymmetric method to the Tree class to check whether a given binary tree is symmetric. Hint: Write an isMirrorOf method first to check whether one tree is the mirror image of another. We are only interested in the structure, not in the contents of the nodes.
@@ -207,8 +220,10 @@ object Node {
  * scala> Tree.fromDotstring("abd..e..c.fg...")
  * res1: Node[Char] = a(b(d,e),c(,f(g,)))
  * The file containing the full class definitions for this section is tree.scala.
- *
- * Multiway Trees
+ */
+}
+
+/* Multiway Trees
  *
  * A multiway tree is composed of a root element and a (possibly empty) set of successors which are multiway trees themselves. A multiway tree is never empty. The set of successor trees is sometimes called a forest.
  *
@@ -266,7 +281,9 @@ object Node {
  * [Note: Much of this problem is taken from the wording of the same problem in the Prolog set. This is certainly one way of looking at Lisp notation, but it's not how the language actually represents that syntax internally. I can elaborate more on this, if requested. <PMG>]
  *
  * The complete source file for this section is mtree.scala.
- *
+ */
+
+/*
  * Graphs
  *
  * A graph is defined as a set of nodes and a set of edges, where each edge is a pair of nodes.
